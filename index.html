@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>NovaPay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f9fc;
+      color: #0a2540;
+    }
+
+    header {
+      padding: 20px 40px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #425466;
+      margin-bottom: 40px;
+    }
+
+    button {
+      background: #635bff;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #5145cd;
+    }
+  </style>
+</head>
+<body>
+
+<header>NovaPay</header>
+
+<section class="hero">
+  <h1>Modern Payments Infrastructure</h1>
+  <p>Accept secure payments worldwide with one integration.</p>
+  <button id="checkout-button">Buy for $20</button>
+</section>
+
+<script>
+  const stripe = Stripe("YOUR_PUBLISHABLE_KEY");
+
+  document.getElementById("checkout-button").addEventListener("click", async () => {
+    const response = await fetch("/create-checkout-session", {
+      method: "POST",
+    });
+
+    const session = await response.json();
+
+    await stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+  });
+</script>
+
+</body>
+</html>
